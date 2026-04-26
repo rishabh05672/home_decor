@@ -1,5 +1,6 @@
 import 'package:decoze/utils/app_routes_name.dart';
 import 'package:decoze/utils/bottom_navigaion.dart';
+import 'package:decoze/views/home_actions/search/search_view.dart';
 import 'package:decoze/views/onboarding/create_account_view.dart';
 import 'package:decoze/views/onboarding/login_view.dart';
 import 'package:decoze/views/onboarding/onboarding_view.dart';
@@ -44,6 +45,11 @@ class AppRoutes {
         name: AppRoutesName.bottomNavigation,
         path: AppRoutesName.bottomNavigation,
         builder: (context, state) => const BottomNavigationView(),
+      ),
+      GoRoute(
+        name: AppRoutesName.search,
+        path: AppRoutesName.search,
+        builder: (context, state) => const SearchView(),
       ),
     ],
   );

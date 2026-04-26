@@ -5,4 +5,5 @@ class AppRoutesName {
   static const String createAccount = "/create_account";
   static const String login = "/login";
   static const String bottomNavigation = "/bottom_navigation";
+  static const String search = "/search";
 }

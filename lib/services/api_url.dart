@@ -3,4 +3,6 @@ class ApiUrl {
   static var login = '$baseUrl/api/auth/login';
   static var signUp = '$baseUrl/api/auth/signup';
   static var home = '$baseUrl/api/home';
+  static var search = '$baseUrl/api/search';
+  static var topSearches = '$baseUrl/api/search/top';
 }

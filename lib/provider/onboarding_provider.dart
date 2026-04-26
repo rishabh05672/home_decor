@@ -1,4 +1,4 @@
-import 'package:decoze/model/onboarding_model.dart';
+import 'package:decoze/models/onboarding_model.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingProvider extends ChangeNotifier {
