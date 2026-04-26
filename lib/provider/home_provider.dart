@@ -2,29 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:decoze/services/api_url.dart';
+import 'package:decoze/models/home_data_model.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  List _bannerImages = [];
-  List get bannerImages => _bannerImages;
-
-  List<Map<String, dynamic>> _sectionImages = [];
-
-  List<Map<String, dynamic>> get sectionImages => _sectionImages;
-
-  List<Map<String, dynamic>> _topSelling = [];
-
-  List<Map<String, dynamic>> get topSelling => _topSelling;
-
-  List<Map<String, dynamic>> _collection = [];
-
-  List<Map<String, dynamic>> get collection => _collection;
-
-  List<Map<String, dynamic>> _outdoorCollection = [];
-
-  List<Map<String, dynamic>> get outddorCollection => _outdoorCollection;
+  HomeDataModel? _homeData;
+  HomeDataModel? get homeData => _homeData;
 
   Future<void> fetchHomeData() async {
     _isLoading = true;
@@ -35,12 +20,7 @@ class HomeProvider extends ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
-          final resData = data['data'];
-          _bannerImages = List.from(resData['bannerImages'] ?? _bannerImages);
-          _sectionImages = List<Map<String, dynamic>>.from(resData['sectionImages'] ?? _sectionImages);
-          _topSelling = List<Map<String, dynamic>>.from(resData['topSelling'] ?? _topSelling);
-          _collection = List<Map<String, dynamic>>.from(resData['collection'] ?? _collection);
-          _outdoorCollection = List<Map<String, dynamic>>.from(resData['outdoorCollection'] ?? _outdoorCollection);
+          _homeData = HomeDataModel.fromJson(data['data']);
         }
       }
     } catch (e) {

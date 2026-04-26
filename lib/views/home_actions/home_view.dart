@@ -62,7 +62,7 @@ class _HomeViewState extends State<HomeView> {
             Expanded(
               child: Consumer<HomeProvider>(
                 builder: (context, provider, child) {
-                  if (provider.isLoading || provider.bannerImages.isEmpty) {
+                  if (provider.isLoading || provider.homeData == null) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
@@ -75,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
                         Column(
                           children: [
                             CarouselSlider(
-                              items: provider.bannerImages.map((image) {
+                              items: provider.homeData!.bannerImages.map((image) {
                                 return ClipRRect(
                                   borderRadius: BorderRadius.circular(16),
                                   child: Image.asset(
@@ -102,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
                             // Dotted Indicators
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: provider.bannerImages
+                              children: provider.homeData!.bannerImages
                                   .asMap()
                                   .entries
                                   .map((entry) {
@@ -142,12 +142,12 @@ class _HomeViewState extends State<HomeView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: List.generate(
-                              provider.sectionImages.length,
+                              provider.homeData!.sectionImages.length,
                               (index) {
-                                final section = provider.sectionImages[index];
+                                final section = provider.homeData!.sectionImages[index];
                                 return _buildSectionTitle(
-                                  image: section["image"]!,
-                                  title: section["title"]!,
+                                  image: section.image,
+                                  title: section.title,
                                   isSelected: _selectedSectionIndex == index,
                                   height: 40,
                                   width: 40,
@@ -192,7 +192,7 @@ class _HomeViewState extends State<HomeView> {
                     SizedBox(height: 24),
                     Consumer<HomeProvider>(
                       builder: (context, provider, child) {
-                        final collection = provider.collection;
+                        final collection = provider.homeData!.collection;
                         if (collection.isEmpty) return const SizedBox.shrink();
                         
                         return Padding(
@@ -205,7 +205,7 @@ class _HomeViewState extends State<HomeView> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
                                     child: Image.asset(
-                                      collection[0]["image"],
+                                      collection[0].image,
                                       width: 382,
                                       height: 164,
                                       fit: BoxFit.fill,
@@ -215,7 +215,7 @@ class _HomeViewState extends State<HomeView> {
                                     bottom: 9,
                                     left: 13,
                                     child: Text(
-                                      collection[0]["title"],
+                                      collection[0].title,
                                       style: AppTextStyle.getTextStyle(
                                         color: AppColor.whitePure,
                                         fontSize: AppFontSize.medium,
@@ -234,7 +234,7 @@ class _HomeViewState extends State<HomeView> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(4),
                                         child: Image.asset(
-                                          collection[1]["image"],
+                                          collection[1].image,
                                           width: 194,
                                           height: 224,
                                           fit: BoxFit.fill,
@@ -244,7 +244,7 @@ class _HomeViewState extends State<HomeView> {
                                         bottom: 9,
                                         left: 13,
                                         child: Text(
-                                          collection[1]["title"],
+                                          collection[1].title,
                                           style: AppTextStyle.getTextStyle(
                                             color: AppColor.whitePure,
                                             fontSize: AppFontSize.small,
@@ -265,7 +265,7 @@ class _HomeViewState extends State<HomeView> {
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                               child: Image.asset(
-                                                collection[2]["image"],
+                                                collection[2].image,
                                                 width: double.infinity,
                                                 height: 106,
                                                 fit: BoxFit.fill,
@@ -275,7 +275,7 @@ class _HomeViewState extends State<HomeView> {
                                               bottom: 9,
                                               left: 13,
                                               child: Text(
-                                                collection[2]["title"],
+                                                collection[2].title,
                                                 style:
                                                     AppTextStyle.getTextStyle(
                                                       color: AppColor.whitePure,
@@ -295,7 +295,7 @@ class _HomeViewState extends State<HomeView> {
                                               borderRadius:
                                                   BorderRadius.circular(4),
                                               child: Image.asset(
-                                                collection[3]["image"],
+                                                collection[3].image,
                                                 width: double.infinity,
                                                 height: 106,
                                                 fit: BoxFit.fill,
@@ -305,7 +305,7 @@ class _HomeViewState extends State<HomeView> {
                                               bottom: 9,
                                               left: 13,
                                               child: Text(
-                                                collection[3]["title"],
+                                                collection[3].title,
                                                 style:
                                                     AppTextStyle.getTextStyle(
                                                       color: AppColor.whitePure,
@@ -417,9 +417,10 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Consumer<HomeProvider>(
         builder: (context, provider, child) {
+          if (provider.homeData == null) return const SizedBox.shrink();
           return Row(
-            children: List.generate(provider.topSelling.length, (index) {
-              final item = provider.topSelling[index];
+            children: List.generate(provider.homeData!.topSelling.length, (index) {
+              final item = provider.homeData!.topSelling[index];
               return Container(
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.only(left: 10),
@@ -437,7 +438,7 @@ class _HomeViewState extends State<HomeView> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: Image.asset(
-                        item["image"],
+                        item.image,
                         width: 122,
                         height: 144,
                         fit: BoxFit.cover,
@@ -445,7 +446,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      item["choice"],
+                      item.choice,
                       style: TextStyle(
                         color: AppColor.textSecondary200,
                         fontSize: 10,
@@ -454,7 +455,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item["title"],
+                      item.title,
                       style: TextStyle(
                         color: AppColor.primary500,
                         fontSize: 14,
@@ -463,7 +464,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      "\$ ${item["price"]}",
+                      "\$ ${item.price}",
                       style: TextStyle(
                         color: AppColor.textSecondary50,
                         fontSize: 14,
@@ -477,7 +478,7 @@ class _HomeViewState extends State<HomeView> {
                         Icon(Icons.star, size: 12, color: AppColor.warning),
                         SizedBox(width: 3),
                         Text(
-                          item["rating"],
+                          item.rating,
                           style: TextStyle(
                             color: AppColor.textSecondary200,
                             fontSize: 10,
@@ -501,9 +502,10 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Consumer<HomeProvider>(
         builder: (context, provider, child) {
+          if (provider.homeData == null) return const SizedBox.shrink();
           return Row(
-            children: List.generate(provider.outddorCollection.length, (index) {
-              final item = provider.outddorCollection[index];
+            children: List.generate(provider.homeData!.outdoorCollection.length, (index) {
+              final item = provider.homeData!.outdoorCollection[index];
               return Container(
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.only(left: 10),
@@ -521,7 +523,7 @@ class _HomeViewState extends State<HomeView> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: Image.asset(
-                        item["image"],
+                        item.image,
                         width: 122,
                         height: 144,
                         fit: BoxFit.cover,
@@ -529,7 +531,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      item["choice"],
+                      item.choice,
                       style: TextStyle(
                         color: AppColor.textSecondary200,
                         fontSize: 10,
@@ -538,7 +540,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      item["title"],
+                      item.title,
                       style: TextStyle(
                         color: AppColor.primary500,
                         fontSize: 14,
@@ -547,7 +549,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      "\$ ${item["price"]}",
+                      "\$ ${item.price}",
                       style: TextStyle(
                         color: AppColor.textSecondary50,
                         fontSize: 14,
@@ -561,7 +563,7 @@ class _HomeViewState extends State<HomeView> {
                         Icon(Icons.star, size: 12, color: AppColor.warning),
                         SizedBox(width: 3),
                         Text(
-                          item["rating"],
+                          item.rating,
                           style: TextStyle(
                             color: AppColor.textSecondary200,
                             fontSize: 10,
